@@ -39,7 +39,7 @@ class CreateOrderService {
       products,
     );
 
-    if(!existentProducts.length) {
+    if (!existentProducts.length) {
       throw new AppError('Could not find any products with the given ids');
     }
 
@@ -47,20 +47,23 @@ class CreateOrderService {
 
     const checkInexistentProducts = products.filter(
       product => !existentProductsIds.includes(product.id),
-    )
+    );
 
-    if(checkInexistentProducts.length) {
-      throw new AppError(`Could not find product ${checkInexistentProducts[0].id}`,
+    if (checkInexistentProducts.length) {
+      throw new AppError(
+        `Could not find product ${checkInexistentProducts[0].id}`,
       );
     }
 
-    const findProductsWithNoQuantityAvaiable = products.filter(
-      product => existentProducts.filter(p => p.id === product.id)[0].quantity < product.quantity,
+    const findProductsWithNoQuantityAvailable = products.filter(
+      product =>
+        existentProducts.filter(p => p.id === product.id)[0].quantity <
+        product.quantity,
     );
 
-    if(findProductsWithNoQuantityAvaiable.length) {
+    if (findProductsWithNoQuantityAvailable.length) {
       throw new AppError(
-        `The quantity ${findProductsWithNoQuantityAvaiable[0].quantity} is not avaiable for ${findProductsWithNoQuantityAvaiable}`
+        `The quantity ${findProductsWithNoQuantityAvailable[0].quantity} is not available for ${findProductsWithNoQuantityAvailable[0].id}`,
       );
     }
 
@@ -80,7 +83,8 @@ class CreateOrderService {
     const orderedProductsQuantity = order_products.map(product => ({
       id: product.product_id,
       quantity:
-        existentProducts.filter(p => p.id === product.product_id)[0].quantity - product.quantity,
+        existentProducts.filter(p => p.id === product.product_id)[0].quantity -
+        product.quantity,
     }));
 
     await this.productsRepository.updateQuantity(orderedProductsQuantity);

@@ -15,12 +15,13 @@ interface IRequest {
 class CreateProductService {
   constructor(
     @inject('ProductsRepository')
-    private productsRepository: IProductsRepository) {}
+    private productsRepository: IProductsRepository,
+  ) {}
 
   public async execute({ name, price, quantity }: IRequest): Promise<Product> {
     const productExists = await this.productsRepository.findByName(name);
 
-    if(productExists) {
+    if (productExists) {
       throw new AppError('There is already one product with this name');
     }
 

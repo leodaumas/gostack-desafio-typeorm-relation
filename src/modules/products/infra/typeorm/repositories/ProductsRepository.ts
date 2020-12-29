@@ -24,7 +24,7 @@ class ProductsRepository implements IProductsRepository {
     const product = await this.ormRepository.create({
       name,
       price,
-      quantity
+      quantity,
     });
 
     await this.ormRepository.save(product);
